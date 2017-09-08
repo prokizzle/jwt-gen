@@ -1,7 +1,7 @@
 require 'jwt'
 
 class JwtGen
-    attr_reader :secret
+    attr_reader :secret, :email, :user_id, :extras
 
     def initialize(secret:, user_id:, email:, extras: {})
         @secret = secret
