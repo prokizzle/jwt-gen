@@ -1,9 +1,16 @@
-require_relative '../lib/app'
+require_relative '../lib/jwt_gen'
 
 describe JwtGen do
-    before do
-       @app = JwtGen.new(email: 'bob@foo.com', user_id: 1, secret: '1234')
+
+    it "has a version number" do
+        expect(JwtGen::VERSION).not_to be nil
     end
+
+    describe 'generate' do
+    before do
+       @app = JwtGen::App.new(email: 'bob@foo.com', user_id: 1, secret: '1234')
+    end
+
 
     it 'accepts the right parameters' do
         expect(@app.email).to eq('bob@foo.com')
@@ -20,10 +27,11 @@ describe JwtGen do
         decoded = JWT.decode(token, '1234', true, { :algorithm => 'HS256' })[0]
         expect(decoded).to eq({"email" => "bob@foo.com", "user_id" => 1})
     end
+    end
 
     describe 'extras' do
         before do
-            @app = JwtGen.new(email: 'foo@bar.com', user_id: 1, secret: '123', extras: {admin: false})
+            @app = JwtGen::App.new(email: 'foo@bar.com', user_id: 1, secret: '123', extras: {admin: false})
             @token = @app.call
         end
 
@@ -37,7 +45,7 @@ describe JwtGen do
         end
 
         it "properly handles nil extras" do
-            app = JwtGen.new(email: 'foo@bar', user_id: 1, secret: '123', extras: nil)
+            app = JwtGen::App.new(email: 'foo@bar', user_id: 1, secret: '123', extras: nil)
             expect(app.extras).to eq({})
             expect(app.call.class).to eq(String)
         end
