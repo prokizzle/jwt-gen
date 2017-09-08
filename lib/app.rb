@@ -7,7 +7,7 @@ class JwtGen
         @secret = secret
         @user_id = user_id
         @email = email
-        @extras = extras
+        @extras = extras || {}
     end
 
     def call

@@ -38,7 +38,7 @@ describe JwtGen do
 
         it "properly handles nil extras" do
             app = JwtGen.new(email: 'foo@bar', user_id: 1, secret: '123', extras: nil)
-            expect(app.extras).to eq(nil)
+            expect(app.extras).to eq({})
             expect(app.call.class).to eq(String)
         end
     end
