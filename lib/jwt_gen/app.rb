@@ -1,8 +1,9 @@
 require 'jwt'
+require 'clipboard'
 
 module JwtGen
     class App
-        attr_reader :secret, :email, :user_id, :extras
+        attr_reader :secret, :email, :user_id, :extras, :token
 
         def initialize(secret:, user_id:, email:, extras: {})
             @secret = secret
@@ -12,7 +13,9 @@ module JwtGen
         end
 
         def call
-            generate_token 
+                token = generate_token
+                Clipboard.copy(token)
+            token
         end
 
         private
@@ -25,7 +28,7 @@ module JwtGen
         end
 
         def generate_token
-            JWT.encode(payload, secret, 'HS256')
+            @token ||= JWT.encode(payload, secret, 'HS256')
         end
     end
 end

@@ -50,4 +50,15 @@ describe JwtGen do
             expect(app.call.class).to eq(String)
         end
     end
+
+    describe 'clipboard' do
+        before do
+            @app = JwtGen::App.new(secret: '123', user_id: 1, email: 'bob@bob.com')
+        end
+
+        it 'should copy the token to the clipboard' do
+            @app.call
+            expect(Clipboard.paste).to eq(@app.token)
+        end
+    end
 end
