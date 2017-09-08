@@ -28,7 +28,8 @@ begin
     params = {email: options['--email'], user_id: options['--user-id'], secret: options['<secret>']}
     extra_params = JSON.parse(options['--extra-params']) if options['--extra-params']
     app = JwtGen::App.new(params.merge({extras: extra_params}))
-    puts app.call
+    app.call
+    puts "token has been copied to clipboard"
 rescue Docopt::Exit => e
     puts e.message
 end
