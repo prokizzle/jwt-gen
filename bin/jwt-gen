@@ -1,0 +1,23 @@
+require 'docopt'
+require 'pp'
+
+doc = <<DOCOPT
+ThredUp JWT Generator
+
+Usage:
+#{__FILE__} generate <token> [--user-id=<user_id>] [--email=<email_address]
+#{__FILE__} -h | --help
+#{__FILE__} --version
+
+Options:
+-h --help               Show this screen.
+--user-id=<user_id>     User Id in the system
+--email=<email>         Email address of the user
+
+DOCOPT
+
+begin
+    pp Docopt::docopt(doc)
+rescue Docopt::Exit => e
+    puts e.message
+end
