@@ -1,23 +1,29 @@
 require 'docopt'
 require 'pp'
+require_relative '../lib/app'
 
 doc = <<DOCOPT
 ThredUp JWT Generator
 
 Usage:
-#{__FILE__} generate <token> [--user-id=<user_id>] [--email=<email_address]
+#{__FILE__} generate <secret> --user-id=<user_id> --email=<email_address [--extra-params=<extra_parameters>]
 #{__FILE__} -h | --help
 #{__FILE__} --version
 
 Options:
--h --help               Show this screen.
---user-id=<user_id>     User Id in the system
---email=<email>         Email address of the user
+-h --help                        Show this screen.
+--user-id=<user_id>              User Id in the system
+--email=<email>                  Email address of the user
+--extra-params=<params>          JSON encoded string of additional parameters
 
 DOCOPT
 
 begin
-    pp Docopt::docopt(doc)
+    options = Docopt::docopt(doc)
+    params = {email: options['--email'], user_id: options['--user-id'], secret: options['secret']}
+    extra_params = JSON.parse(options['--extra-params']) if options['--extra-params']
+    app = JwtGen.new(params.merge({extras: extra_params}))
+    puts app.call
 rescue Docopt::Exit => e
     puts e.message
 end

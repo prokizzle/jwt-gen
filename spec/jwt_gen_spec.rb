@@ -35,5 +35,11 @@ describe JwtGen do
             decoded = JWT.decode(@token, '123', true, { :algorithm => 'HS256'})[0]
             expect(decoded).to eq({"email" => "foo@bar.com", "user_id" => 1, "admin" => false})
         end
+
+        it "properly handles nil extras" do
+            app = JwtGen.new(email: 'foo@bar', user_id: 1, secret: '123', extras: nil)
+            expect(app.extras).to eq(nil)
+            expect(app.call.class).to eq(String)
+        end
     end
 end
